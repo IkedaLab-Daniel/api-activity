@@ -36,7 +36,10 @@ class ActivityController extends Controller
 
         $activity = Activity::create($validated);
 
-        return response()->json(['data' => $activity], 201);
+        return response()->json([
+            'message' => 'Activity created successfully',
+            'data' => $activity
+        ], 201);
     }
 
     /**
@@ -80,6 +83,13 @@ class ActivityController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $activity = Activity::find($id);
+
+        if (!$activity) return response()->json(["message" => "Activity not found"]);
+
+        $activity->delete();
+
+        return response()->json(['message' => 'Activity has been deleted.']);
+
     }
 }
