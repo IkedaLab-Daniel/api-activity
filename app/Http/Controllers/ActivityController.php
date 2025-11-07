@@ -27,7 +27,16 @@ class ActivityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'nullable',
+            'status'=> 'nullable',
+            'due_date' => 'required|date'
+        ]);
+
+        $activity = Activity::create($validated);
+
+        return response()->json(['data' => $activity], 201);
     }
 
     /**
