@@ -44,7 +44,11 @@ class ActivityController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $activity = Activity::find($id);
+
+        if (!$activity) return response()->json(["message" => "Activity not found"]);
+
+        return response()->json($activity);
     }
 
     /**
@@ -52,7 +56,23 @@ class ActivityController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'sometimes|max:255',
+            'description' => 'sometimes',
+            'status'=> 'sometimes',
+            'due_date' => 'sometimes|date'
+        ]);
+
+        $activity = Activity::find($id);
+        if (!$activity) return response()->json(["message" => "Activity not found"]);
+
+        $activity->update($validated);
+
+        return response()->json([
+            "message" => "Activity updated",
+            "data" => $activity
+        ]);
+
     }
 
     /**
